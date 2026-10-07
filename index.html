@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#080b18">
+    <meta name="description" content="Hangman Nexus 2026 - Advanced word guessing game">
+
+    <title>Hangman Nexus 2026</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="./style/style.css">
+
+    <script src="./word-list.js" defer></script>
+    <script src="./script.js" defer></script>
+</head>
+
+<body>
+
+    <!-- Ambient Background -->
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Top Navigation -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">H</div>
+
+            <div>
+                <h1>Hangman <span>Nexus</span></h1>
+                <p>WORD CHALLENGE 2026</p>
+            </div>
+        </div>
+
+        <div class="top-actions">
+
+            <button class="icon-btn" id="themeBtn" aria-label="Toggle theme">
+                ☀
+            </button>
+
+            <button class="icon-btn" id="soundBtn" aria-label="Toggle sound">
+                🔊
+            </button>
+
+            <button class="icon-btn" id="pauseBtn" aria-label="Pause game">
+                ⏸
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- Main Application -->
+    <main class="app-shell">
+
+        <!-- HUD -->
+        <section class="hud">
+
+            <div class="hud-card">
+                <span class="hud-label">SCORE</span>
+                <strong id="scoreValue">0</strong>
+            </div>
+
+            <div class="hud-card">
+                <span class="hud-label">STREAK</span>
+                <strong id="streakValue">0</strong>
+            </div>
+
+            <div class="hud-card">
+                <span class="hud-label">ROUND</span>
+                <strong id="roundValue">1</strong>
+            </div>
+
+            <div class="hud-card timer-card">
+                <span class="hud-label">TIME</span>
+                <strong id="timerValue">60</strong>
+                <div class="timer-line">
+                    <span id="timerProgress"></span>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- Game Grid -->
+        <section class="game-layout">
+
+            <!-- LEFT PANEL -->
+            <aside class="side-panel left-panel">
+
+                <div class="panel-header">
+                    <div>
+                        <span class="eyebrow">MISSION</span>
+                        <h2>Guess the Word</h2>
+                    </div>
+
+                    <span class="live-dot">LIVE</span>
+                </div>
+
+
+                <!-- Hangman Visual -->
+                <div class="hangman-stage">
+
+                    <div class="energy-ring ring-one"></div>
+                    <div class="energy-ring ring-two"></div>
+
+                    <div class="hangman-art">
+
+                        <div class="gallows">
+                            <div class="gallows-top"></div>
+                            <div class="gallows-side"></div>
+                            <div class="gallows-base"></div>
+                            <div class="gallows-rope"></div>
+                        </div>
+
+                        <div class="body-part head"></div>
+                        <div class="body-part body"></div>
+                        <div class="body-part arm-left"></div>
+                        <div class="body-part arm-right"></div>
+                        <div class="body-part leg-left"></div>
+                        <div class="body-part leg-right"></div>
+
+                    </div>
+
+                    <div class="danger-meter">
+                        <span>THREAT</span>
+
+                        <div class="danger-bars">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- Difficulty -->
+                <div class="setting-block">
+
+                    <div class="setting-title">
+                        <span>DIFFICULTY</span>
+                    </div>
+
+                    <div class="difficulty-buttons">
+
+                        <button class="difficulty-btn active" data-difficulty="easy">
+                            <span>Easy</span>
+                            <small>+1.0x</small>
+                        </button>
+
+                        <button class="difficulty-btn" data-difficulty="medium">
+                            <span>Medium</span>
+                            <small>+1.5x</small>
+                        </button>
+
+                        <button class="difficulty-btn" data-difficulty="hard">
+                            <span>Hard</span>
+                            <small>+2.0x</small>
+                        </button>
+
+                        <button class="difficulty-btn" data-difficulty="nightmare">
+                            <span>Nightmare</span>
+                            <small>+3.0x</small>
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Category -->
+                <div class="setting-block">
+
+                    <div class="setting-title">
+                        <span>CATEGORY</span>
+                    </div>
+
+                    <select id="categorySelect">
+                        <option value="all">All Categories</option>
+                        <option value="technology">Technology</option>
+                        <option value="science">Science</option>
+                        <option value="nature">Nature</option>
+                        <option value="space">Space</option>
+                        <option value="food">Food</option>
+                        <option value="sports">Sports</option>
+                        <option value="music">Music</option>
+                        <option value="mystery">Mystery</option>
+                    </select>
+
+                </div>
+
+            </aside>
+
+
+            <!-- CENTER GAME -->
+            <section class="game-panel">
+
+                <div class="game-header">
+
+                    <div>
+                        <span class="eyebrow">CURRENT CHALLENGE</span>
+
+                        <div class="challenge-title">
+                            <h2 id="categoryName">All Categories</h2>
+                            <span id="difficultyBadge">EASY</span>
+                        </div>
+                    </div>
+
+                    <div class="lives">
+                        <span>LIVES</span>
+
+                        <div id="livesContainer">
+                            <i>♥</i>
+                            <i>♥</i>
+                            <i>♥</i>
+                            <i>♥</i>
+                            <i>♥</i>
+                            <i>♥</i>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- Word -->
+                <div class="word-zone">
+
+                    <span class="word-caption">DECODE THE SIGNAL</span>
+
+                    <ul class="word-display" id="wordDisplay"></ul>
+
+                    <div class="word-meta">
+
+                        <span>
+                            <b id="wordLength">0</b> LETTERS
+                        </span>
+
+                        <span>
+                            <b id="comboValue">x1</b> COMBO
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Hint -->
+                <div class="hint-card">
+
+                    <div class="hint-icon">?</div>
+
+                    <div class="hint-content">
+                        <span>INTELLIGENCE CLUE</span>
+                        <p id="hintText">Loading clue...</p>
+                    </div>
+
+                    <button id="hintBtn" class="mini-action">
+                        USE
+                    </button>
+
+                </div>
+
+
+                <!-- Keyboard -->
+                <div class="keyboard-area">
+
+                    <div class="keyboard-header">
+
+                        <span>SELECT LETTER</span>
+
+                        <span id="incorrectText">
+                            Incorrect: <b>0 / 6</b>
+                        </span>
+
+                    </div>
+
+                    <div class="keyboard" id="keyboard"></div>
+
+                </div>
+
+
+                <!-- Powerups -->
+                <div class="powerups">
+
+                    <div class="powerup-heading">
+                        <span>POWER CORE</span>
+                        <small>Strategic abilities</small>
+                    </div>
+
+                    <div class="powerup-grid">
+
+                        <button class="powerup" id="revealBtn">
+
+                            <span class="power-icon">⚡</span>
+
+                            <span>
+                                <b>Reveal</b>
+                                <small>Reveal letter</small>
+                            </span>
+
+                            <em id="revealCount">2</em>
+
+                        </button>
+
+
+                        <button class="powerup" id="lifeBtn">
+
+                            <span class="power-icon">♥</span>
+
+                            <span>
+                                <b>Extra Life</b>
+                                <small>Recover one life</small>
+                            </span>
+
+                            <em id="lifeCount">1</em>
+
+                        </button>
+
+
+                        <button class="powerup" id="doubleBtn">
+
+                            <span class="power-icon">×2</span>
+
+                            <span>
+                                <b>Double XP</b>
+                                <small>Next correct guess</small>
+                            </span>
+
+                            <em id="doubleCount">1</em>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Controls -->
+                <div class="bottom-controls">
+
+                    <button class="secondary-btn" id="newGameBtn">
+                        ↻ New Game
+                    </button>
+
+                    <button class="primary-btn" id="nextBtn">
+                        Next Challenge →
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- RIGHT PANEL -->
+            <aside class="side-panel right-panel">
+
+                <div class="panel-header">
+                    <div>
+                        <span class="eyebrow">YOUR PROFILE</span>
+                        <h2>Player Stats</h2>
+                    </div>
+
+                    <div class="avatar">A</div>
+                </div>
+
+
+                <div class="profile-card">
+
+                    <div class="profile-name">
+                        <strong>Player One</strong>
+                        <span>WORD HUNTER</span>
+                    </div>
+
+                    <div class="xp-track">
+                        <div id="xpBar"></div>
+                    </div>
+
+                    <div class="xp-info">
+                        <span>LEVEL <b id="levelValue">1</b></span>
+                        <span><b id="xpValue">0</b> XP</span>
+                    </div>
+
+                </div>
+
+
+                <!-- Stats -->
+                <div class="stats-grid">
+
+                    <div class="stat">
+                        <span>Games</span>
+                        <strong id="gamesValue">0</strong>
+                    </div>
+
+                    <div class="stat">
+                        <span>Wins</span>
+                        <strong id="winsValue">0</strong>
+                    </div>
+
+                    <div class="stat">
+                        <span>Best Streak</span>
+                        <strong id="bestStreakValue">0</strong>
+                    </div>
+
+                    <div class="stat">
+                        <span>Win Rate</span>
+                        <strong id="winRateValue">0%</strong>
+                    </div>
+
+                </div>
+
+
+                <!-- Achievement -->
+                <div class="achievement-card">
+
+                    <div class="achievement-icon">🏆</div>
+
+                    <div>
+                        <span>NEXT ACHIEVEMENT</span>
+                        <strong id="achievementTitle">First Victory</strong>
+
+                        <div class="achievement-progress">
+                            <span id="achievementBar"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- Daily Challenge -->
+                <div class="daily-card">
+
+                    <div class="daily-top">
+                        <span>DAILY CHALLENGE</span>
+                        <b>24H</b>
+                    </div>
+
+                    <h3>Today's Word Hunt</h3>
+
+                    <p>
+                        Complete one challenge to earn bonus XP.
+                    </p>
+
+                    <button id="dailyBtn">
+                        Start Daily Challenge
+                    </button>
+
+                </div>
+
+
+                <!-- Tip -->
+                <div class="tip-card">
+
+                    <span>💡 PRO TIP</span>
+
+                    <p id="tipText">
+                        Use the hint strategically. Save your power-ups for difficult rounds.
+                    </p>
+
+                </div>
+
+            </aside>
+
+        </section>
+
+    </main>
+
+
+    <!-- Result Modal -->
+    <div class="modal" id="resultModal">
+
+        <div class="modal-backdrop"></div>
+
+        <div class="result-card">
+
+            <button class="modal-close" id="closeModal">×</button>
+
+            <div class="result-icon" id="resultIcon">🏆</div>
+
+            <span class="result-label" id="resultLabel">MISSION COMPLETE</span>
+
+            <h2 id="resultTitle">Excellent!</h2>
+
+            <p id="resultMessage">
+                You decoded the word.
+            </p>
+
+            <div class="result-word">
+                <span>THE WORD WAS</span>
+                <strong id="resultWord">---</strong>
+            </div>
+
+            <div class="result-stats">
+
+                <div>
+                    <span>Score</span>
+                    <b id="resultScore">+0</b>
+                </div>
+
+                <div>
+                    <span>XP</span>
+                    <b id="resultXP">+0</b>
+                </div>
+
+                <div>
+                    <span>Streak</span>
+                    <b id="resultStreak">0</b>
+                </div>
+
+            </div>
+
+            <button class="primary-btn modal-play" id="modalPlayBtn">
+                Continue →
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Pause Modal -->
+    <div class="modal" id="pauseModal">
+
+        <div class="modal-backdrop"></div>
+
+        <div class="pause-card">
+
+            <div class="pause-icon">Ⅱ</div>
+
+            <span class="result-label">GAME PAUSED</span>
+
+            <h2>Take a Breath</h2>
+
+            <p>
+                Your challenge is waiting for you.
+            </p>
+
+            <button class="primary-btn" id="resumeBtn">
+                Resume Game
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <span id="toastIcon">✓</span>
+        <div>
+            <strong id="toastTitle">Nice!</strong>
+            <p id="toastMessage">Correct letter.</p>
+        </div>
+    </div>
+
+
+    <!-- Confetti -->
+    <div id="confetti"></div>
+
+</body>
+
+</html>
